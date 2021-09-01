@@ -1,0 +1,15 @@
+__pycache__
+.scon*
+.eggs
+*.egg_info
+.vscode
+
+# Built by the build system
+version.py
+
+# Pytest
+tests/.tests
+pytest_session.txt
+.mypy_cache
+.pytest_cache
+.coverage
