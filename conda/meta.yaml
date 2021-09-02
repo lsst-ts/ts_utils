@@ -1,0 +1,33 @@
+{% set data= load_setup_py_data() %}
+
+package:
+  name: ts-utils
+  version: {{ data.get('version') }}
+
+source:
+  path: ../
+
+build:
+  noarch: generic
+  script: python -m pip install --no-deps --ignore-installed .
+
+test:
+  requires:
+    - ts-conda-build =0.3
+  source_files:
+    - python
+    - tests
+    - setup.cfg
+  commands:
+    - pytest
+
+requirements:
+  host:
+    - python
+    - pip
+    - setuptools_scm
+    - setuptools
+  run:
+    - python
+    - setuptools
+    - setuptools_scm
