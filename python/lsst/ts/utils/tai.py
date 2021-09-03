@@ -100,10 +100,9 @@ def tai_from_utc(
 ) -> float:
     """Return TAI in unix seconds, given UTC or any `astropy.time.Time`.
 
-    Smear UTC time out evenly on the day before a leap second,
-    so the day has exactly 86400 UTC seconds (of modified duration).
-    Thus the difference between TAI and UTC is not an integer on those days.
-    See the notes for more information.
+    Warning: smears time evenly on the day before a leap second.
+    See :ref:`Leap Second Smearing <lsst.ts.utils.leap_second_smearing>`
+    for details.
 
     Because of the smearing, this function should only be used for scalar
     measures of UTC, such as unix seconds, Julian Date or Modified Julian Date.
@@ -132,42 +131,8 @@ def tai_from_utc(
 
     Notes
     -----
-    **Smearing During the Day Before a Leap Second**
-
-    On the day before a leap second this routine follows `astropy.time` and
-    Standards of Fundamental Astronomy (SOFA): by "smearing" UTC over the
-    whole day, so the day has exactly 86400 seconds of modified duration.
-    This leads to TAI-UTC varying continuously on that day,
-    instead of being an integer number of seconds.
-    See https://github.com/astropy/astropy/issues/10055
-
-    The reason for this smearing is to make the function single-valued
-    and continuous near a leap second. This avoids two issues when computing
-    TAI from a scalar value of UTC during a leap second; depending
-    on the sign of the leap second:
-
-    * In one case there is a one second period during which
-      there are two possible values of TAI, both equally valid.
-    * In the other case there is a one second gap in TAI.
-
-    To convert UTC to TAI without this smearing: use astropy.time
-    to convert the value, and express the UTC date as an ISO string.
-    ISO format supports 60 <= seconds < 61, whereas scalar representations
-    cannot. Do not use datetime format because neither the datetime library
-    nor astropy.time support datetimes with 60 <= seconds < 61.
-
-    On Linux an excellent way to get *current* TAI on the day of a leap second
-    is to configure ntp or ptp to maintain a leap second table, then use
-    the ``CLOCK_TAI`` clock (which is only available on Linux).
-    If you do this then you must configure npt or ptp to make the realtime
-    clock jump at a leap second (rather than smearing over some duration),
-    because on Linux the difference between ``REALTIME_CLOCK`` and
-    ``CLOCK_TAI`` is always an integer number of seconds.
-
-    **Updating the Leap Second Table**
-
-    The leap second table is automatically updated in the background
-    (though updates are very infrequent).
+    This function uses a leap second table that is automatically updated
+    in the background (though updates are very infrequent).
     """
     if isinstance(utc, float) and format == "unix":
         utc_unix = utc
@@ -181,10 +146,9 @@ def tai_from_utc(
 def tai_from_utc_unix(utc_unix: float) -> float:
     """Return TAI in unix seconds, given UTC in unix seconds.
 
-    Smear UTC time out evenly on the day before a leap second,
-    so the day has exactly 86400 UTC seconds (of modified duration).
-    Thus the difference between TAI and UTC is not an integer on those days.
-    See the notes for `tai_from_utc` for more information.
+    Warning: smears time evenly on the day before a leap second.
+    See :ref:`Leap Second Smearing <lsst.ts.utils.leap_second_smearing>`
+    for details.
 
     Parameters
     ----------
@@ -202,6 +166,11 @@ def tai_from_utc_unix(utc_unix: float) -> float:
         If the date is earlier than 1972 (which is before integer leap seconds)
         or within one day of the expiration date of the leap second table
         (which is automatically updated).
+
+    Notes
+    -----
+    This function uses a leap second table that is automatically updated
+    in the background (though updates are very infrequent).
     """
     # Use a local pointer, to prevent race conditions while the
     # global table is being replaced by `_update_leap_second_table`.
@@ -257,6 +226,11 @@ def utc_from_tai_unix(tai_unix: float) -> float:
         If the date is earlier than 1972 (which is before integer leap seconds)
         or within one day of the expiration date of the leap second table
         (which is automatically updated).
+
+    Notes
+    -----
+    This function uses a leap second table that is automatically updated
+    in the background (though updates are very infrequent).
     """
     # Use a local pointer, to prevent race conditions while the
     # global table is being replaced by `_update_leap_second_table`.
