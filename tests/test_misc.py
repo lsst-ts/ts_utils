@@ -1,6 +1,6 @@
 # This file is part of ts_utils.
 #
-# Developed for the LSST Data Management System.
+# Developed for the Rubin Observatory Telescope and Site System.
 # This product includes software developed by the LSST Project
 # (https://www.lsst.org).
 # See the COPYRIGHT file at the top-level directory of this distribution
@@ -19,17 +19,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import typing
+import asyncio
+import unittest
 
-if typing.TYPE_CHECKING:
-    __version__ = "?"
-else:
-    try:
-        from .version import *
-    except ImportError:
-        __version__ = "?"
+from lsst.ts import utils
 
-from .angle import *
-from .misc import *
-from .tai import *
-from .testutils import *
+
+class BasicsTestCase(unittest.TestCase):
+    def test_make_done_future(self) -> None:
+        done_future = utils.make_done_future()
+        assert isinstance(done_future, asyncio.Future)
+        assert done_future.done()
+        assert done_future.result() is None
+        assert not done_future.cancelled()
+        assert done_future.exception() is None
