@@ -39,15 +39,15 @@ class BasicsTestCase(unittest.TestCase):
                 angle1=angle1, angle2=angle2, expected_diff=expected_diff
             ):
                 diff = utils.angle_diff(angle1, angle2)
-                pytest.approx(diff.deg, expected_diff, abs=1e-7)
+                assert diff.deg == pytest.approx(expected_diff, abs=1e-7)
                 diff = utils.angle_diff(angle2, angle1)
-                pytest.approx(diff.deg, -expected_diff, abs=1e-7)
+                assert diff.deg == pytest.approx(-expected_diff, abs=1e-7)
                 diff = utils.angle_diff(Angle(angle1, u.deg), angle2)
-                pytest.approx(diff.deg, expected_diff, abs=1e-7)
+                assert diff.deg == pytest.approx(expected_diff, abs=1e-7)
                 diff = utils.angle_diff(angle1, Angle(angle2, u.deg))
-                pytest.approx(diff.deg, expected_diff, abs=1e-7)
+                assert diff.deg == pytest.approx(expected_diff, abs=1e-7)
                 diff = utils.angle_diff(Angle(angle1, u.deg), Angle(angle2, u.deg))
-                pytest.approx(diff.deg, expected_diff, abs=1e-7)
+                assert diff.deg == pytest.approx(expected_diff, abs=1e-7)
 
     def test_angle_wrap_center(self) -> None:
         for base_angle, expected_result in (
@@ -65,9 +65,9 @@ class BasicsTestCase(unittest.TestCase):
                 ):
                     angle = base_angle + 360 * nwraps
                     result = utils.angle_wrap_center(angle)
-                    pytest.approx(result.deg, expected_result, abs=1e-7)
+                    assert result.deg == pytest.approx(expected_result, abs=1e-7)
                     result = utils.angle_wrap_center(Angle(angle, u.deg))
-                    pytest.approx(result.deg, expected_result, abs=1e-7)
+                    assert result.deg == pytest.approx(expected_result, abs=1e-7)
 
     def test_angle_wrap_nonnegative(self) -> None:
         for base_angle, expected_result in (
@@ -85,9 +85,9 @@ class BasicsTestCase(unittest.TestCase):
                 ):
                     angle = base_angle + 360 * nwraps
                     result = utils.angle_wrap_nonnegative(angle)
-                    pytest.approx(result.deg, expected_result, abs=1e-7)
+                    assert result.deg == pytest.approx(expected_result, abs=1e-7)
                     result = utils.angle_wrap_nonnegative(Angle(angle, u.deg))
-                    pytest.approx(result.deg, expected_result, abs=1e-7)
+                    assert result.deg == pytest.approx(expected_result, abs=1e-7)
 
     def test_assert_angles_almost_equal(self) -> None:
         for angle1, angle2 in ((5.15, 5.14), (-0.20, 359.81), (270, -90.1)):
