@@ -60,7 +60,7 @@ class BasicsTestCase(unittest.TestCase):
                 assert isinstance(astropy_time1, astropy.time.Time)
                 assert astropy_time1.scale == "tai"
                 tai_unix_round_trip1 = utils.tai_from_utc(astropy_time1)
-                pytest.approx(tai_unix, tai_unix_round_trip1, abs=1e-6)
+                assert tai_unix == pytest.approx(tai_unix_round_trip1, abs=1e-6)
 
     def check_tai_from_utc(self, utc_ap: astropy.time.Time) -> None:
         """Check tai_from_utc at a specific UTC date.
@@ -73,28 +73,28 @@ class BasicsTestCase(unittest.TestCase):
         tai = utils.tai_from_utc(utc_ap.utc.unix)
 
         tai_alt = alternate_tai_from_utc_unix(utc_ap.utc.unix)
-        pytest.approx(tai, tai_alt, abs=1e-6)
+        assert tai == pytest.approx(tai_alt, abs=1e-6)
 
         tai2 = utils.tai_from_utc(utc_ap.utc.iso, format="iso")
-        pytest.approx(tai, tai2, abs=1e-6)
+        assert tai == pytest.approx(tai2, abs=1e-6)
 
         tai3 = utils.tai_from_utc(utc_ap.utc.iso, format=None)
-        pytest.approx(tai, tai3, abs=1e-6)
+        assert tai == pytest.approx(tai3, abs=1e-6)
 
         tai4 = utils.tai_from_utc(utc_ap.utc.mjd, format="mjd")
-        pytest.approx(tai, tai4, abs=1e-6)
+        assert tai == pytest.approx(tai4, abs=1e-6)
 
         tai_mjd = (tai + utils.MJD_MINUS_UNIX_SECONDS) / utils.SECONDS_PER_DAY
         tai_mjd_ap = astropy.time.Time(tai_mjd, scale="tai", format="mjd")
         tai5 = utils.tai_from_utc(tai_mjd_ap)
-        pytest.approx(tai, tai5, abs=1e-6)
+        assert tai == pytest.approx(tai5, abs=1e-6)
 
         tai_iso_ap = astropy.time.Time(utc_ap.tai.iso, scale="tai", format="iso")
         tai6 = utils.tai_from_utc(tai_iso_ap)
-        pytest.approx(tai, tai6, abs=1e-6)
+        assert tai == pytest.approx(tai6, abs=1e-6)
 
         tai7 = utils.tai_from_utc(utc_ap)
-        pytest.approx(tai, tai7, abs=1e-6)
+        assert tai == pytest.approx(tai7, abs=1e-6)
 
     def test_leap_second_table(self) -> None:
         """Check that the leap second table is set and an update scheduled."""
@@ -134,10 +134,10 @@ class BasicsTestCase(unittest.TestCase):
             "1972-01-01", scale="utc", format="iso"
         ).unix
         desired_first_tai_minus_utc = 10
-        pytest.approx(first_utc_unix, desired_first_utc_unix)
-        pytest.approx(first_tai_minus_utc, desired_first_tai_minus_utc)
+        assert first_utc_unix == pytest.approx(desired_first_utc_unix)
+        assert first_tai_minus_utc == pytest.approx(desired_first_tai_minus_utc)
         first_tai_unix = utils.tai_from_utc(first_utc_unix)
-        pytest.approx(first_tai_unix, first_utc_unix + first_tai_minus_utc)
+        assert first_tai_unix == pytest.approx(first_utc_unix + first_tai_minus_utc)
         with pytest.raises(ValueError):
             utils.tai_from_utc(first_utc_unix - 0.001)
 
@@ -151,7 +151,9 @@ class BasicsTestCase(unittest.TestCase):
         # Final value of TAI-UTC in the table.
         # Note that the last entry in the table has TAI-UTC = None.
         final_tai_minus_utc = utils.tai._UTC_LEAP_SECOND_TABLE[-1][1]
-        pytest.approx(last_tai_unix - last_usable_utc_unix, final_tai_minus_utc)
+        assert last_tai_unix - last_usable_utc_unix == pytest.approx(
+            final_tai_minus_utc
+        )
         with pytest.raises(ValueError):
             utils.tai_from_utc(last_usable_utc_unix + 0.001)
 
@@ -163,7 +165,7 @@ class BasicsTestCase(unittest.TestCase):
         tai_minus_utc_after = 37
         tai0 = utc0 + tai_minus_utc_after
         desired_tai_minus_utc_after = utils.tai_from_utc_unix(utc0) - utc0
-        pytest.approx(tai_minus_utc_after, desired_tai_minus_utc_after)
+        assert tai_minus_utc_after == pytest.approx(desired_tai_minus_utc_after)
         # Don't test right at tai0 because roundoff error could cause failure;
         # utc_from_tai_unix is discontinuous at a leap second tranition.
         for tai in (
@@ -177,22 +179,24 @@ class BasicsTestCase(unittest.TestCase):
             utc = utils.utc_from_tai_unix(tai)
             tai_minus_utc = tai - utc
             if tai < tai0:
-                pytest.approx(tai_minus_utc, tai_minus_utc_before)
+                assert tai_minus_utc == pytest.approx(tai_minus_utc_before)
             else:
-                pytest.approx(tai_minus_utc, tai_minus_utc_after)
+                assert tai_minus_utc == pytest.approx(tai_minus_utc_after)
 
         # Test values near the limits of the TAI leap second table
         first_tai_unix, first_tai_minus_utc = utils.tai._TAI_LEAP_SECOND_TABLE[0]
         first_utc_unix = utils.utc_from_tai_unix(first_tai_unix)
         desired_first_tai_minus_utc = 10
-        pytest.approx(first_tai_minus_utc, desired_first_tai_minus_utc)
-        pytest.approx(first_tai_unix - first_utc_unix, desired_first_tai_minus_utc)
+        assert first_tai_minus_utc == pytest.approx(desired_first_tai_minus_utc)
+        assert first_tai_unix - first_utc_unix == pytest.approx(
+            desired_first_tai_minus_utc
+        )
         with pytest.raises(ValueError):
             utils.utc_from_tai_unix(first_tai_unix - 0.001)
 
         last_tai_unix, last_tai_minus_utc = utils.tai._TAI_LEAP_SECOND_TABLE[-1]
         last_utc_unix = utils.utc_from_tai_unix(last_tai_unix)
-        pytest.approx(last_tai_unix - last_utc_unix, last_tai_minus_utc)
+        assert last_tai_unix - last_utc_unix == pytest.approx(last_tai_minus_utc)
         with pytest.raises(ValueError):
             utils.utc_from_tai_unix(last_tai_unix + 0.001)
 
