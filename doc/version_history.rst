@@ -6,12 +6,16 @@
 Version History
 ###############
 
+v1.0.2
+------
+
+Fix a new mypy error by not checking DM's `lsst/__init__.py` files.
+
+
 v1.0.1
 ------
 
-Changes:
-
-* Fix incorrect use of ``pytest.approx`` in unit tests.
+Fix incorrect use of ``pytest.approx`` in unit tests.
 
 v1.0.0
 ------
