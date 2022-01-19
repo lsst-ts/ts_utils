@@ -20,12 +20,60 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import asyncio
+import pytest
+import typing
 import unittest
 
 from lsst.ts import utils
 
 
 class BasicsTestCase(unittest.TestCase):
+    def check_index_generator(
+        self,
+        generator: typing.Generator[int, None, None],
+        expected_values: typing.Sequence[int],
+    ) -> None:
+        values = [next(generator) for i in range(len(expected_values))]
+        assert values == list(expected_values)
+
+    def test_index_generator(self) -> None:
+        with pytest.raises(ValueError):
+            utils.index_generator(1, 1)  # imin >= imax
+        with pytest.raises(ValueError):
+            utils.index_generator(1, 0)  # imin >= imax
+        with pytest.raises(ValueError):
+            utils.index_generator(0, 5, -1)  # i0 < imin
+        with pytest.raises(ValueError):
+            utils.index_generator(0, 5, 6)  # i0 > imax
+
+        # Check default arguments
+        generator = utils.index_generator()
+        self.check_index_generator(generator=generator, expected_values=[1, 2, 3])
+
+        # Check wraparound with default imin and imax;
+        # specifying i0 avoids the need to call next 2*31 times.
+        max_int32 = (1 << 31) - 1
+        generator = utils.index_generator(i0=max_int32)
+        self.check_index_generator(
+            generator=generator, expected_values=[max_int32, 1, 2]
+        )
+
+        imin = -2
+        imax = 5
+        generator = utils.index_generator(imin=-2, imax=5)
+        self.check_index_generator(
+            generator=generator,
+            expected_values=[-2, -1, 0, 1, 2, 3, 4, 5, -2, -1, 0, 1, 2, 3, 4, 5, -2],
+        )
+
+        imin = -2
+        imax = 5
+        i0 = imax
+        generator = utils.index_generator(imin=imin, imax=imax, i0=i0)
+        self.check_index_generator(
+            generator=generator, expected_values=[5, -2, -1, 0, 1, 2, 3, 4, 5, -2]
+        )
+
     def test_make_done_future(self) -> None:
         done_future = utils.make_done_future()
         assert isinstance(done_future, asyncio.Future)
