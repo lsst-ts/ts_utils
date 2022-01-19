@@ -6,6 +6,11 @@
 Version History
 ###############
 
+v1.1.0
+------
+
+Add `index_generator`.
+
 v1.0.2
 ------
 
