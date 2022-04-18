@@ -82,11 +82,11 @@ def modify_environ(**kwargs: typing.Any) -> typing.Generator[None, None, None]:
     -----
     Example of use::
 
-        from lsst.ts import salobj
+        from lsst.ts import utils
         ...
         def test_foo(self):
             set_value = "Value for $ENV_TO_SET"
-            with salobj.modify_environ(
+            with utils.modify_environ(
                 HOME=None,  # Delete this env var
                 ENV_TO_SET=set_value,  # Set this env var
             ):
