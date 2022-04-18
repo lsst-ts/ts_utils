@@ -5,7 +5,7 @@ For more information, see:
 https://developer.lsst.io/stack/building-single-package-docs.html
 """
 
-from documenteer.conf.pipelinespkg import *
+from documenteer.conf.pipelinespkg import *  # type: ignore # noqa
 import lsst.ts.utils  # noqa
 
 project = "ts_utils"
