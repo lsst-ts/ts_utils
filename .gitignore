@@ -13,3 +13,7 @@ pytest_session.txt
 .mypy_cache
 .pytest_cache
 .coverage
+.hypothesis
+
+# Editors
+.vscode
