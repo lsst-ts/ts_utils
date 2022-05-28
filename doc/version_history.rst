@@ -6,6 +6,11 @@
 Version History
 ###############
 
+v1.1.2
+------
+
+* Change the build system to use pyproject.toml.
+
 v1.1.1
 ------
 
