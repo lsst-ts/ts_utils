@@ -9,7 +9,7 @@ lsst.ts.utils
 .. image:: https://img.shields.io/badge/GitHub-gray.svg
     :target: https://github.com/lsst-ts/ts_utils
 .. image:: https://img.shields.io/badge/Jira-gray.svg
-    :target: https://jira.lsstcorp.org/issues/?jql=labels+%3D+ts_utils
+    :target: https://jira.lsstcorp.org/issues/?jql=project=DM%20AND%20labels%3Dts_utils
 
 Overview
 ========
