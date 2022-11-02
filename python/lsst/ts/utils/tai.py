@@ -342,7 +342,14 @@ def _get_current_tai_function() -> typing.Callable[[], float]:
         # to make sure the leap second table is downloaded.
         current_tai_from_utc()
         tslow = current_tai_from_utc()
-        tfast = system_tai()
+        try:
+            tfast = system_tai()
+        except OSError:
+            _log.info(
+                "current_tai uses current_tai_from_utc; your operating system does not support CLOCK_TAI"
+            )
+            return current_tai_from_utc
+
         time_error = tslow - tfast
         # Give margin for being on the day of a leap second
         # (max error is 1 second)
