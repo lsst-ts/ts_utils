@@ -24,11 +24,10 @@ import unittest
 import unittest.mock
 
 import astropy.time
-from astropy.coordinates import Angle
 import astropy.units as u
 import numpy as np
 import pytest
-
+from astropy.coordinates import Angle
 from lsst.ts import utils
 
 

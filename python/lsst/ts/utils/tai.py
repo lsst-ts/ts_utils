@@ -38,11 +38,10 @@ import threading
 import time
 import typing
 
-import astropy.time
-import astropy.utils.iers
 import astropy.coordinates
+import astropy.time
 import astropy.units as u
-
+import astropy.utils.iers
 
 SECONDS_PER_DAY = 24 * 60 * 60
 

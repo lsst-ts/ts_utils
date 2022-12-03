@@ -21,10 +21,9 @@
 
 import unittest
 
-from astropy.coordinates import Angle
 import astropy.units as u
 import pytest
-
+from astropy.coordinates import Angle
 from lsst.ts import utils
 
 
