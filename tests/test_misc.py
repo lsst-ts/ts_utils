@@ -20,10 +20,10 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import asyncio
-import pytest
 import typing
 import unittest
 
+import pytest
 from lsst.ts import utils
 
 

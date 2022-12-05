@@ -5,8 +5,8 @@ For more information, see:
 https://developer.lsst.io/stack/building-single-package-docs.html
 """
 
-from documenteer.conf.pipelinespkg import *  # type: ignore # noqa
 import lsst.ts.utils  # noqa
+from documenteer.conf.pipelinespkg import *  # type: ignore # noqa
 
 project = "ts_utils"
 html_theme_options["logotext"] = project  # type: ignore # noqa
