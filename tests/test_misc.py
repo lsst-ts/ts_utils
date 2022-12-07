@@ -27,7 +27,7 @@ import pytest
 from lsst.ts import utils
 
 
-class BasicsTestCase(unittest.TestCase):
+class BasicsTestCase(unittest.IsolatedAsyncioTestCase):
     def check_index_generator(
         self,
         generator: typing.Generator[int, None, None],
