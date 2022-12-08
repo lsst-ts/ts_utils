@@ -6,6 +6,15 @@
 Version History
 ###############
 
+v1.2.0
+------
+
+* Fix an overly severe log message at import on operating systems without a CLOCK_TAI clock (e.g. macOS).
+  Instead of a warning-level message that describes an error, issue a bland info-level message.
+* Run isort
+* Add isort and mypy to pre-commit and update other pre-commit software versions.
+* Add ImageNameServiceClient class
+
 v1.1.2
 ------
 

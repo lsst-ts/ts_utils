@@ -27,7 +27,6 @@ import unittest.mock
 import astropy.time
 import astropy.units as u
 import pytest
-
 from lsst.ts import utils
 
 

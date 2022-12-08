@@ -28,11 +28,10 @@ __all__ = [
 
 import typing
 
-import astropy.time
-import astropy.utils.iers
 import astropy.coordinates
+import astropy.time
 import astropy.units as u
-
+import astropy.utils.iers
 
 AngleOrDegType = typing.Union[astropy.coordinates.Angle, float]
 

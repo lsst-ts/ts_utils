@@ -33,3 +33,4 @@ from .angle import *
 from .misc import *
 from .tai import *
 from .testutils import *
+from .image_name_service_client import *

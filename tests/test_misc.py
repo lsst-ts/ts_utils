@@ -20,14 +20,14 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import asyncio
-import pytest
 import typing
 import unittest
 
+import pytest
 from lsst.ts import utils
 
 
-class BasicsTestCase(unittest.TestCase):
+class BasicsTestCase(unittest.IsolatedAsyncioTestCase):
     def check_index_generator(
         self,
         generator: typing.Generator[int, None, None],
