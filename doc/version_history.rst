@@ -6,6 +6,11 @@
 Version History
 ###############
 
+v1.2.1
+------
+
+* Add aiohttp as test and run dependencies in conda recipe.
+
 v1.2.0
 ------
 
