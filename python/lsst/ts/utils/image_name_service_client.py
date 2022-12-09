@@ -86,9 +86,9 @@ class ImageNameServiceClient:
         Returns
         -------
         image_sequence_array : `list` of `int`
-            The image id(s).
-        df : `list` of `str`
-            The decoded data in the form of an array.
+            The sequence numbers (e.g. 2).
+        values : `list` of `str`
+            The returned IDs (e.g ['EM1_O_20221208_000008'])
         """
         if num_images < 1:
             raise ValueError("num_images cannot be less than one.")
@@ -110,10 +110,9 @@ class ImageNameServiceClient:
                     fd.write(decoded_chunk)
                     self.log.info(f"{fd=}")
                 fd.seek(0)
-                df = fd.read()
-                df = json.loads(df)
-                self.log.info(f"{df=}")
-                data = df.strip("][").replace('"', "").split(", ")
-                self.log.info(f"{data=}")
-                image_sequence_array = [int(item.split("_")[-1]) for item in data]
-                return image_sequence_array, data
+                values = fd.read()
+                self.log.debug(f"{values=}")
+                values = json.loads(values)
+                self.log.info(f"{values=}")
+                image_sequence_array = [int(item.split("_")[-1]) for item in values]
+                return image_sequence_array, values
