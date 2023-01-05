@@ -20,7 +20,6 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import unittest
-import json
 from aiohttp import web
 
 from lsst.ts.utils.image_name_service_client import ImageNameServiceClient
@@ -46,16 +45,16 @@ async def image_array(request: web.Request) -> web.Response:
     """
     n = request.rel_url.query["n"]
     source_index = request.rel_url.query["sourceIndex"]
-    source = request.rel_url.query["source"]
+
     reply = []
     for image in range(int(n)):
         image += 1
-        msg = source + source_index
+        msg = "FS" + source_index
         msg += "_O"
         msg += "_20221130"
         msg += "_" + f"{image:06d}"
         reply.append(msg)
-    return web.json_response(json.dumps(reply))
+    return web.json_response(reply)
 
 
 class GeneratorTestCase(unittest.IsolatedAsyncioTestCase):
@@ -69,7 +68,7 @@ class GeneratorTestCase(unittest.IsolatedAsyncioTestCase):
         # wait for finish signal
         # await runner.cleanup()
         self.image_name_service_client = ImageNameServiceClient(
-            url="http://127.0.0.1:8080", csc_index=3, source="FS"
+            url="http://127.0.0.1:8080", csc_index=3, source="FiberSpectrograph"
         )
         return super().setUp()
 

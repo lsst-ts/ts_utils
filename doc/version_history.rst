@@ -6,6 +6,11 @@
 Version History
 ###############
 
+v1.2.2
+------
+
+* Correct parsing of returned value from the image name service client
+
 v1.2.1
 ------
 
