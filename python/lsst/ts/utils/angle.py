@@ -33,7 +33,7 @@ import astropy.time
 import astropy.units as u
 import astropy.utils.iers
 
-AngleOrDegType = typing.Union[astropy.coordinates.Angle, float]
+AngleOrDegType: typing.TypeAlias = astropy.coordinates.Angle | float
 
 _MIDDLE_WRAP_ANGLE = astropy.coordinates.Angle(180, u.deg)
 _POSITIVE_WRAP_ANGLE = astropy.coordinates.Angle(360, u.deg)
@@ -46,9 +46,9 @@ def angle_diff(
 
     Parameters
     ----------
-    angle1 : `astropy.coordinates.Angle` or `float`
+    angle1
         Angle 1; if a float then in degrees
-    angle2 : `astropy.coordinates.Angle` or `float`
+    angle2
         Angle 2; if a float then in degrees
 
     Returns
@@ -67,7 +67,7 @@ def angle_wrap_center(angle: AngleOrDegType) -> astropy.coordinates.Angle:
 
     Parameters
     ----------
-    angle : `astropy.coordinates.Angle` or `float`
+    angle
         Angle; if a float then in degrees
 
     Returns
@@ -83,7 +83,7 @@ def angle_wrap_nonnegative(angle: AngleOrDegType) -> astropy.coordinates.Angle:
 
     Parameters
     ----------
-    angle : `astropy.coordinates.Angle` or `float`
+    angle
         Angle; if a float then in degrees
 
     Returns
