@@ -21,56 +21,58 @@
 
 __all__ = ["ImageNameServiceClient"]
 
-import aiohttp
-import json
 import io
+import json
 import logging
+
+import aiohttp
 
 
 class ImageNameServiceClient:
+    """Client for the Image Name Service.
+
+    Parameters
+    ----------
+    url : `str`
+        The image service host.
+        Must be handled by CSC configuration.
+    csc_index : `int`
+        The index of the CSC, needed for some CSCs which have multiple
+        instances running.
+    source : `str`
+        The two letter ID that the service uses for CSC verification.
+        * Electrometer: EM,
+        * FiberSpectrograph: FS,
+        * ComCam: CM,
+        * GenericCamera: GC,
+        * MainCamera: MC,
+        * AuxTel: AT,
+        * TestStand: TS
+
+    Attributes
+    ----------
+    source : `str`
+        The ID used by the service for CSC verification.
+    url : `str`
+        The URL of the image service.
+    csc_index : `str`
+        The index of the CSC, used to handle multi instance CSCs.
+    log : `logging.Logger`
+        The log for the object.
+    """
+
     def __init__(
         self,
         url: str,
         csc_index: int,
         source: str,
     ) -> None:
-        """Implement a client for the Image Name Service.
-
-        Parameters
-        ----------
-        url : `str`
-            The image service host.
-            Must be handled by CSC configuration.
-        csc_index : `int`
-            The index of the CSC, needed for some CSCs which have multiple
-            instances running.
-        source : `str`
-            The two letter ID that the service uses for CSC verification.
-            * Electrometer: EM,
-            * FiberSpectrograph: FS,
-            * ComCam: CM,
-            * GenericCamera: GC,
-            * MainCamera: MC,
-            * AuxTel: AT,
-            * TestStand: TS
-
-        Attributes
-        ----------
-        source : `str`
-            The ID used by the service for CSC verification.
-        url : `str`
-            The URL of the image service.
-        csc_index : `str`
-            The index of the CSC, used to handle multi instance CSCs.
-        log : `logging.Logger`
-            The log for the object.
-        """
         self.source = source
         self.url = url
         self.csc_index = csc_index
         self.log = logging.getLogger(__name__)
 
-    async def get_next_obs_id(self, num_images: int) -> tuple:
+    async def get_next_obs_id(self, num_images: int) -> tuple[list[int], list[str]]:
         """Get the observing ID(s).
 
         Parameters
@@ -81,7 +83,7 @@ class ImageNameServiceClient:
         Raises
         ------
         ValueError
-            Raised when num_images is less than 1.
+            If num_images is less than 1.
 
         Returns
         -------
@@ -110,9 +112,9 @@ class ImageNameServiceClient:
                     fd.write(decoded_chunk)
                     self.log.info(f"{fd=}")
                 fd.seek(0)
-                values = fd.read()
-                self.log.debug(f"{values=}")
-                values = json.loads(values)
+                values_json = fd.read()
+                self.log.debug(f"{values_json=}")
+                values: list[str] = json.loads(values_json)
                 self.log.info(f"{values=}")
                 image_sequence_array = [int(item.split("_")[-1]) for item in values]
                 return image_sequence_array, values
