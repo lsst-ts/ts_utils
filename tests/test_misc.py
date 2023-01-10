@@ -20,8 +20,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import asyncio
-import typing
 import unittest
+from collections.abc import Generator, Sequence
 
 import pytest
 from lsst.ts import utils
@@ -30,8 +30,8 @@ from lsst.ts import utils
 class BasicsTestCase(unittest.IsolatedAsyncioTestCase):
     def check_index_generator(
         self,
-        generator: typing.Generator[int, None, None],
-        expected_values: typing.Sequence[int],
+        generator: Generator[int, None, None],
+        expected_values: Sequence[int],
     ) -> None:
         values = [next(generator) for i in range(len(expected_values))]
         assert values == list(expected_values)

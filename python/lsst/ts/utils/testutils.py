@@ -25,6 +25,7 @@ import contextlib
 import os
 import typing
 import unittest
+from collections.abc import Generator
 
 import astropy.coordinates
 import astropy.units as u
@@ -58,7 +59,7 @@ def assert_angles_almost_equal(
 
 
 @contextlib.contextmanager
-def modify_environ(**kwargs: typing.Any) -> typing.Generator[None, None, None]:
+def modify_environ(**kwargs: typing.Any) -> Generator[None, None, None]:
     """Context manager to temporarily patch os.environ.
 
     This calls `unittest.mock.patch` and is only intended for unit tests.
@@ -110,5 +111,5 @@ def modify_environ(**kwargs: typing.Any) -> typing.Generator[None, None, None]:
             new_environ.pop(name, None)
         else:
             new_environ[name] = value
-    with unittest.mock.patch("os.environ", new_environ):
+    with unittest.mock.patch("os.environ", new_environ):  # type: ignore
         yield

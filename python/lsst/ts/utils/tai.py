@@ -37,6 +37,7 @@ import math
 import threading
 import time
 import typing
+from collections.abc import Sequence
 
 import astropy.coordinates
 import astropy.time
@@ -52,16 +53,12 @@ MJD_MINUS_UNIX_SECONDS = (
 
 # A list of (utc_unix_seconds, TAI-UTC seconds);
 # automatically updated by `_update_leap_second_table`.
-_UTC_LEAP_SECOND_TABLE: typing.Optional[
-    typing.Sequence[typing.Tuple[float, float]]
-] = None
+_UTC_LEAP_SECOND_TABLE: Sequence[tuple[float, float]] | None = None
 # A list of (tai_unix_seconds, TAI-UTC seconds);
 # automatically updated by `_update_leap_second_table`.
-_TAI_LEAP_SECOND_TABLE: typing.Optional[
-    typing.Sequence[typing.Tuple[float, float]]
-] = None
+_TAI_LEAP_SECOND_TABLE: Sequence[tuple[float, float]] | None = None
 # A threading timer that schedules automatic update of the leap second table.
-_LEAP_SECOND_TABLE_UPDATE_TIMER: typing.Optional[threading.Timer] = None
+_LEAP_SECOND_TABLE_UPDATE_TIMER: threading.Timer | None = None
 # When to update the leap second table, in days before expiration.
 _LEAP_SECOND_TABLE_UPDATE_MARGIN_DAYS = 10
 
@@ -94,8 +91,8 @@ def current_tai_from_utc() -> float:
 
 
 def tai_from_utc(
-    utc: typing.Union[float, str, astropy.time.Time],
-    format: typing.Optional[str] = "unix",
+    utc: float | str | astropy.time.Time,
+    format: str | None = "unix",
 ) -> float:
     """Return TAI in unix seconds, given UTC or any `astropy.time.Time`.
 
