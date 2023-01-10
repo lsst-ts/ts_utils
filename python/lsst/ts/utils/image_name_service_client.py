@@ -21,8 +21,6 @@
 
 __all__ = ["ImageNameServiceClient"]
 
-import io
-import json
 import logging
 
 import aiohttp
@@ -105,16 +103,7 @@ class ImageNameServiceClient:
             url, raise_for_status=True, connector=aiohttp.TCPConnector(ssl=False)
         ) as session:
             async with session.get(url=call_url, params=params) as response:
-                fd: io.StringIO = io.StringIO()
-                async for chunk in response.content.iter_chunked(1024):
-                    decoded_chunk = chunk.decode()
-                    self.log.info(f"{decoded_chunk=}")
-                    fd.write(decoded_chunk)
-                    self.log.info(f"{fd=}")
-                fd.seek(0)
-                values_json = fd.read()
-                self.log.debug(f"{values_json=}")
-                values: list[str] = json.loads(values_json)
+                values: list[str] = await response.json()
                 self.log.info(f"{values=}")
                 image_sequence_array = [int(item.split("_")[-1]) for item in values]
                 return image_sequence_array, values
