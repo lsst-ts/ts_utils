@@ -6,6 +6,12 @@
 Version History
 ###############
 
+v1.2.2
+------
+
+* Correct parsing of returned value from the image name service client.
+* Simplify `ImageNameServiceClient` code and improve documentation.
+
 v1.2.1
 ------
 
@@ -18,7 +24,7 @@ v1.2.0
   Instead of a warning-level message that describes an error, issue a bland info-level message.
 * Run isort
 * Add isort and mypy to pre-commit and update other pre-commit software versions.
-* Add ImageNameServiceClient class
+* Add `ImageNameServiceClient` class
 
 v1.1.2
 ------

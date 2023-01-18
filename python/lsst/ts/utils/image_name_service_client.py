@@ -21,56 +21,56 @@
 
 __all__ = ["ImageNameServiceClient"]
 
-import aiohttp
-import json
-import io
 import logging
+
+import aiohttp
 
 
 class ImageNameServiceClient:
+    """Client for the Image Name Service.
+
+    Parameters
+    ----------
+    url : `str`
+        The image service host.
+        Must be handled by CSC configuration.
+    csc_index : `int`
+        The index of the CSC, needed for some CSCs which have multiple
+        instances running.
+    source : `str`
+        The two letter ID that the service uses for CSC verification.
+        * Electrometer: EM,
+        * FiberSpectrograph: FS,
+        * ComCam: CM,
+        * GenericCamera: GC,
+        * MainCamera: MC,
+        * AuxTel: AT,
+        * TestStand: TS
+
+    Attributes
+    ----------
+    source : `str`
+        The ID used by the service for CSC verification.
+    url : `str`
+        The URL of the image service.
+    csc_index : `str`
+        The index of the CSC, used to handle multi instance CSCs.
+    log : `logging.Logger`
+        The log for the object.
+    """
+
     def __init__(
         self,
         url: str,
         csc_index: int,
         source: str,
     ) -> None:
-        """Implement a client for the Image Name Service.
-
-        Parameters
-        ----------
-        url : `str`
-            The image service host.
-            Must be handled by CSC configuration.
-        csc_index : `int`
-            The index of the CSC, needed for some CSCs which have multiple
-            instances running.
-        source : `str`
-            The two letter ID that the service uses for CSC verification.
-            * Electrometer: EM,
-            * FiberSpectrograph: FS,
-            * ComCam: CM,
-            * GenericCamera: GC,
-            * MainCamera: MC,
-            * AuxTel: AT,
-            * TestStand: TS
-
-        Attributes
-        ----------
-        source : `str`
-            The ID used by the service for CSC verification.
-        url : `str`
-            The URL of the image service.
-        csc_index : `str`
-            The index of the CSC, used to handle multi instance CSCs.
-        log : `logging.Logger`
-            The log for the object.
-        """
         self.source = source
         self.url = url
         self.csc_index = csc_index
         self.log = logging.getLogger(__name__)
 
-    async def get_next_obs_id(self, num_images: int) -> tuple:
+    async def get_next_obs_id(self, num_images: int) -> tuple[list[int], list[str]]:
         """Get the observing ID(s).
 
         Parameters
@@ -81,14 +81,14 @@ class ImageNameServiceClient:
         Raises
         ------
         ValueError
-            Raised when num_images is less than 1.
+            If num_images is less than 1.
 
         Returns
         -------
         image_sequence_array : `list` of `int`
-            The image id(s).
-        df : `list` of `str`
-            The decoded data in the form of an array.
+            The sequence numbers (e.g. 2).
+        values : `list` of `str`
+            The returned IDs (e.g ['EM1_O_20221208_000008'])
         """
         if num_images < 1:
             raise ValueError("num_images cannot be less than one.")
@@ -103,17 +103,7 @@ class ImageNameServiceClient:
             url, raise_for_status=True, connector=aiohttp.TCPConnector(ssl=False)
         ) as session:
             async with session.get(url=call_url, params=params) as response:
-                fd: io.StringIO = io.StringIO()
-                async for chunk in response.content.iter_chunked(1024):
-                    decoded_chunk = chunk.decode()
-                    self.log.info(f"{decoded_chunk=}")
-                    fd.write(decoded_chunk)
-                    self.log.info(f"{fd=}")
-                fd.seek(0)
-                df = fd.read()
-                df = json.loads(df)
-                self.log.info(f"{df=}")
-                data = df.strip("][").replace('"', "").split(", ")
-                self.log.info(f"{data=}")
-                image_sequence_array = [int(item.split("_")[-1]) for item in data]
-                return image_sequence_array, data
+                values: list[str] = await response.json()
+                self.log.info(f"{values=}")
+                image_sequence_array = [int(item.split("_")[-1]) for item in values]
+                return image_sequence_array, values
