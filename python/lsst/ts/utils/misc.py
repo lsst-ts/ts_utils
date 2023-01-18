@@ -22,15 +22,15 @@
 __all__ = ["index_generator", "make_done_future"]
 
 import asyncio
-import typing
+from collections.abc import Generator
 
 # Maximum value of a 32-bit signed int
 MAX_INT32 = (1 << 31) - 1
 
 
 def index_generator(
-    imin: int = 1, imax: int = MAX_INT32, i0: typing.Optional[int] = None
-) -> typing.Generator[int, None, None]:
+    imin: int = 1, imax: int = MAX_INT32, i0: int | None = None
+) -> Generator[int, None, None]:
     """Sequential index generator.
 
     Returns values i0, i0+1, i0+2, ..., max, min, min+1, ...
@@ -65,7 +65,7 @@ def index_generator(
 
     # define an inner generator and return that
     # in order to get immediate argument checking
-    def index_impl() -> typing.Generator[int, None, None]:
+    def index_impl() -> Generator[int, None, None]:
         index = i0 - 1  # type: ignore
         while True:
             index += 1
