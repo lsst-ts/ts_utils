@@ -6,6 +6,12 @@
 Version History
 ###############
 
+v1.2.3
+------
+
+* pre-commit: update black to 23.1.0, isort to 5.12.0, mypy to 1.0.0, and pre-commit-hooks to v4.4.0.
+* ``Jenkinsfile``: do not run as root.
+
 v1.2.2
 ------
 
