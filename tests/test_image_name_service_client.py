@@ -20,8 +20,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import unittest
-from aiohttp import web
 
+from aiohttp import web
 from lsst.ts.utils.image_name_service_client import ImageNameServiceClient
 
 
