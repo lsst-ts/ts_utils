@@ -74,7 +74,7 @@ class BasicsTestCase(unittest.IsolatedAsyncioTestCase):
             generator=generator, expected_values=[5, -2, -1, 0, 1, 2, 3, 4, 5, -2]
         )
 
-    def test_make_done_future(self) -> None:
+    async def test_make_done_future(self) -> None:
         done_future = utils.make_done_future()
         assert isinstance(done_future, asyncio.Future)
         assert done_future.done()
