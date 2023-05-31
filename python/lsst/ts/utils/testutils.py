@@ -91,8 +91,8 @@ def modify_environ(**kwargs: typing.Any) -> Generator[None, None, None]:
                 HOME=None,  # Delete this env var
                 ENV_TO_SET=set_value,  # Set this env var
             ):
-                self.assertNotIn("HOME", os.environ)
-                self.assert(os.environ["ENV_TO_SET"], set_value)
+                assert "HOME" not in os.environ
+                assert os.environ["ENV_TO_SET"] == set_value
     """
     bad_value_strs = [
         f"{name}: {value!r}"

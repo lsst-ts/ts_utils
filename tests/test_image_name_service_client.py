@@ -20,8 +20,9 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import unittest
-from aiohttp import web
 
+import pytest
+from aiohttp import web
 from lsst.ts.utils.image_name_service_client import ImageNameServiceClient
 
 
@@ -85,7 +86,7 @@ class GeneratorTestCase(unittest.IsolatedAsyncioTestCase):
         ) = await self.image_name_service_client.get_next_obs_id(num_images=2)
         assert image_sequence_array == [1, 2]
         assert data == ["FS3_O_20221130_000001", "FS3_O_20221130_000002"]
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             (
                 image_sequence_array,
                 data,

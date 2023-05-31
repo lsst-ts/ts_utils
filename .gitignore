@@ -1,20 +1,22 @@
 __pycache__
-.scon*
-.eggs
-*.egg_info
-.vscode
-
-# Built by the build system
+*.egg
+*.egg-info
+*.pyc
+*.log
 version.py
 
-# Pytest
+# editors
+.vscode
+
+# pytest
 tests/.tests
 pytest_session.txt
-.mypy_cache
+.hypothesis
 .pytest_cache
 .coverage
-.hypothesis
-*.log
 
-# Editors
-.vscode
+# ts_pre_commit_config
+.pre-commit-config.yaml
+.flake8
+.isort.cfg
+.mypy.ini

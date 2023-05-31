@@ -38,7 +38,7 @@ class BasicsTestCase(unittest.TestCase):
             with self.subTest(angle1=angle1, angle2=angle2):
                 diff = abs(utils.angle_diff(angle1, angle2))
                 bad_diff = diff - epsilon
-                self.assertGreater(bad_diff.deg, 0)
+                assert bad_diff.deg > 0
                 with pytest.raises(AssertionError):
                     utils.assert_angles_almost_equal(angle1, angle2, bad_diff)
                 with pytest.raises(AssertionError):
@@ -76,11 +76,11 @@ class BasicsTestCase(unittest.TestCase):
         rng = np.random.default_rng(seed=45)
         original_environ = os.environ.copy()
         n_to_delete = 3
-        self.assertGreater(len(original_environ), n_to_delete)
+        assert len(original_environ) > n_to_delete
         new_key0 = "_a_long_key_name_" + astropy.time.Time.now().isot
         new_key1 = "_another_long_key_name_" + astropy.time.Time.now().isot
-        self.assertNotIn(new_key0, os.environ)
-        self.assertNotIn(new_key1, os.environ)
+        assert new_key0 not in os.environ
+        assert new_key1 not in os.environ
         some_keys = rng.choice(list(original_environ.keys()), 3)
         kwargs = {
             some_keys[0]: None,
