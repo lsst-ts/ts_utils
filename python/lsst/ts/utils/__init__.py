@@ -30,7 +30,7 @@ else:
         __version__ = "?"
 
 from .angle import *
+from .image_name_service_client import *
 from .misc import *
 from .tai import *
 from .testutils import *
-from .image_name_service_client import *

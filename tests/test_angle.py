@@ -94,7 +94,7 @@ class BasicsTestCase(unittest.TestCase):
             with self.subTest(angle1=angle1, angle2=angle2):
                 diff = abs(utils.angle_diff(angle1, angle2))
                 bad_diff = diff - epsilon
-                self.assertGreater(bad_diff.deg, 0)
+                assert bad_diff.deg > 0
                 with pytest.raises(AssertionError):
                     utils.assert_angles_almost_equal(angle1, angle2, bad_diff)
                 with pytest.raises(AssertionError):
