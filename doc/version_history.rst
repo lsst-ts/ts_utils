@@ -6,6 +6,11 @@
 Version History
 ###############
 
+v1.2.5
+------
+
+* ups table: remove sconsUtils as a dependency.
+
 v1.2.4
 ------
 
