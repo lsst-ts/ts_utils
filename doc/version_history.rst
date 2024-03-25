@@ -6,6 +6,16 @@
 Version History
 ###############
 
+v1.2.6
+------
+
+* Update the version of ts-conda-build to 0.4 in the conda recipe.
+
+v1.2.5
+------
+
+* ups table: remove sconsUtils as a dependency.
+
 v1.2.4
 ------
 
