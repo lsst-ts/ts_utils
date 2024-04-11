@@ -32,7 +32,6 @@ requirements:
     - python {{ python }}
     - setuptools
     - setuptools_scm
-    - ts-conda-build =0.3
   run:
     - aiohttp
     - python {{ python }}
