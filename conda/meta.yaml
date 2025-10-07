@@ -10,11 +10,12 @@ source:
 build:
   noarch: python
   script: {{ PYTHON }} -m pip install --no-deps --ignore-installed .
+  string: "py{{ PY_VER | replace('.', '') }}{{ PKG_HASH }}_{{ PKG_BUILDNUM }}"
 
 test:
   requires:
     - aiohttp
-    - ts-conda-build =0.4
+    - ts-conda-build =0.5
   source_files:
     - pyproject.toml
     - python
@@ -32,6 +33,7 @@ requirements:
     - python {{ python }}
     - setuptools
     - setuptools_scm
+    - ts-conda-build =0.5
   run:
     - aiohttp
     - python {{ python }}
