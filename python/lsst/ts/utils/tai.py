@@ -170,7 +170,7 @@ def tai_from_utc_unix(utc_unix: float) -> float:
     """
     # Use a local pointer, to prevent race conditions while the
     # global table is being replaced by `_update_leap_second_table`.
-    global _UTC_LEAP_SECOND_TABLE
+    global _UTC_LEAP_SECOND_TABLE  # noqa: F824
     utc_leap_second_table = _UTC_LEAP_SECOND_TABLE
     if utc_leap_second_table is None:
         raise RuntimeError("No leap second table")
@@ -230,7 +230,7 @@ def utc_from_tai_unix(tai_unix: float) -> float:
     """
     # Use a local pointer, to prevent race conditions while the
     # global table is being replaced by `_update_leap_second_table`.
-    global _TAI_LEAP_SECOND_TABLE
+    global _TAI_LEAP_SECOND_TABLE  # noqa: F824
     tai_leap_second_table = _TAI_LEAP_SECOND_TABLE
     if tai_leap_second_table is None:
         raise RuntimeError("No leap second table")
