@@ -22,8 +22,27 @@
 __all__ = ["ImageNameServiceClient"]
 
 import logging
+import os
 
 import aiohttp
+
+
+_SITE_URLS = {
+    "summit": "http://ccs.lsst.org",
+    "base": "http://lsstcam-mcm.ls.lsst.org",
+    "tucson": "http://comcam-mcm.tu.lsst.org",
+}
+_CSC_NAMES = frozenset(
+    {
+        "Electrometer",
+        "FiberSpectrograph",
+        "ComCam",
+        "GenericCamera",
+        "MainCamera",
+        "AuxTel",
+        "TestStand",
+    }
+)
 
 
 class ImageNameServiceClient:
@@ -31,29 +50,22 @@ class ImageNameServiceClient:
 
     Parameters
     ----------
-    url : `str`
-        The image service host.
-        Must be handled by CSC configuration.
+    url : `str`, optional
+        The image service host. If omitted, select the host using `LSST_SITE`.
     csc_index : `int`
         The index of the CSC, needed for some CSCs which have multiple
         instances running.
     source : `str`
-        The two letter ID that the service uses for CSC verification.
-        * Electrometer: EM,
-        * FiberSpectrograph: FS,
-        * ComCam: CM,
-        * GenericCamera: GC,
-        * MainCamera: MC,
-        * AuxTel: AT,
-        * TestStand: TS
+        The CSC name: Electrometer, FiberSpectrograph, ComCam, GenericCamera,
+        MainCamera, AuxTel, or TestStand.
 
     Attributes
     ----------
     source : `str`
-        The ID used by the service for CSC verification.
+        The CSC name used by the service for CSC verification.
     url : `str`
         The URL of the image service.
-    csc_index : `str`
+    csc_index : `int`
         The index of the CSC, used to handle multi instance CSCs.
     log : `logging.Logger`
         The log for the object.
@@ -61,10 +73,24 @@ class ImageNameServiceClient:
 
     def __init__(
         self,
-        url: str,
-        csc_index: int,
-        source: str,
+        url: str | None = None,
+        csc_index: int | None = None,
+        source: str | None = None,
     ) -> None:
+        if csc_index is None:
+            raise TypeError("csc_index is required")
+        if source not in _CSC_NAMES:
+            raise ValueError(f"Unsupported CSC source: {source!r}")
+
+        if url is None:
+            site = os.getenv("LSST_SITE", "").lower()
+            try:
+                url = _SITE_URLS[site]
+            except KeyError as exc:
+                raise ValueError(f"Unsupported LSST_SITE: {site!r}") from exc
+        elif not url.lower().startswith(("http://", "https://")):
+            url = f"http://{url}"
+
         self.source = source
         self.url = url
         self.csc_index = csc_index

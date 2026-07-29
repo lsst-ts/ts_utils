@@ -46,11 +46,12 @@ async def image_array(request: web.Request) -> web.Response:
     """
     n = request.rel_url.query["n"]
     source_index = request.rel_url.query["sourceIndex"]
+    source_prefix = {"FiberSpectrograph": "FS"}[request.rel_url.query["source"]]
 
     reply = []
     for image in range(int(n)):
         image += 1
-        msg = "FS" + source_index
+        msg = source_prefix + source_index
         msg += "_O"
         msg += "_20221130"
         msg += "_" + f"{image:06d}"
@@ -95,6 +96,64 @@ class GeneratorTestCase(unittest.IsolatedAsyncioTestCase):
                 image_sequence_array,
                 data,
             ) = await self.image_name_service_client.get_next_obs_id(num_images=-1)
+
+
+@pytest.mark.parametrize(
+    ("site", "url"),
+    [
+        ("summit", "http://ccs.lsst.org"),
+        ("base", "http://lsstcam-mcm.ls.lsst.org"),
+        ("tucson", "http://comcam-mcm.tu.lsst.org"),
+    ],
+)
+def test_site_url(monkeypatch: pytest.MonkeyPatch, site: str, url: str) -> None:
+    monkeypatch.setenv("LSST_SITE", site)
+    client = ImageNameServiceClient(csc_index=3, source="Electrometer")
+    assert client.url == url
+
+
+@pytest.mark.parametrize(
+    ("url", "expected_url"),
+    [
+        ("mcm.example.org", "http://mcm.example.org"),
+        ("http://mcm.example.org", "http://mcm.example.org"),
+        ("https://mcm.example.org", "https://mcm.example.org"),
+    ],
+)
+def test_explicit_url(url: str, expected_url: str) -> None:
+    client = ImageNameServiceClient(url=url, csc_index=3, source="Electrometer")
+    assert client.url == expected_url
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        "Electrometer",
+        "FiberSpectrograph",
+        "ComCam",
+        "GenericCamera",
+        "MainCamera",
+        "AuxTel",
+        "TestStand",
+    ],
+)
+def test_source_name(source: str) -> None:
+    client = ImageNameServiceClient(
+        url="http://mcm.example.org", csc_index=3, source=source
+    )
+    assert client.source == source
+
+
+@pytest.mark.parametrize("site", ["", "unknown"])
+def test_invalid_site(monkeypatch: pytest.MonkeyPatch, site: str) -> None:
+    monkeypatch.setenv("LSST_SITE", site)
+    with pytest.raises(ValueError, match="Unsupported LSST_SITE"):
+        ImageNameServiceClient(csc_index=3, source="Electrometer")
+
+
+def test_invalid_source() -> None:
+    with pytest.raises(ValueError, match="Unsupported CSC source"):
+        ImageNameServiceClient(url="http://mcm.example.org", csc_index=3, source="EM")
 
 
 if __name__ == "__main__":
