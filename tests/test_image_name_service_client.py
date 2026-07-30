@@ -125,19 +125,8 @@ def test_explicit_url(url: str, expected_url: str) -> None:
     assert client.url == expected_url
 
 
-@pytest.mark.parametrize(
-    "source",
-    [
-        "Electrometer",
-        "FiberSpectrograph",
-        "ComCam",
-        "GenericCamera",
-        "MainCamera",
-        "AuxTel",
-        "TestStand",
-    ],
-)
-def test_source_name(source: str) -> None:
+def test_source_is_not_restricted() -> None:
+    source = "NewCsc"
     client = ImageNameServiceClient(
         url="http://mcm.example.org", csc_index=3, source=source
     )
@@ -149,11 +138,6 @@ def test_invalid_site(monkeypatch: pytest.MonkeyPatch, site: str) -> None:
     monkeypatch.setenv("LSST_SITE", site)
     with pytest.raises(ValueError, match="Unsupported LSST_SITE"):
         ImageNameServiceClient(csc_index=3, source="Electrometer")
-
-
-def test_invalid_source() -> None:
-    with pytest.raises(ValueError, match="Unsupported CSC source"):
-        ImageNameServiceClient(url="http://mcm.example.org", csc_index=3, source="EM")
 
 
 if __name__ == "__main__":

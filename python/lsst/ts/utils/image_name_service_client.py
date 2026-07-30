@@ -32,19 +32,6 @@ _SITE_URLS = {
     "base": "http://lsstcam-mcm.ls.lsst.org",
     "tucson": "http://comcam-mcm.tu.lsst.org",
 }
-_CSC_NAMES = frozenset(
-    {
-        "Electrometer",
-        "FiberSpectrograph",
-        "ComCam",
-        "GenericCamera",
-        "MainCamera",
-        "AuxTel",
-        "TestStand",
-    }
-)
-
-
 class ImageNameServiceClient:
     """Client for the Image Name Service.
 
@@ -56,8 +43,7 @@ class ImageNameServiceClient:
         The index of the CSC, needed for some CSCs which have multiple
         instances running.
     source : `str`
-        The CSC name: Electrometer, FiberSpectrograph, ComCam, GenericCamera,
-        MainCamera, AuxTel, or TestStand.
+        The CSC name used by the service for verification.
 
     Attributes
     ----------
@@ -79,8 +65,8 @@ class ImageNameServiceClient:
     ) -> None:
         if csc_index is None:
             raise TypeError("csc_index is required")
-        if source not in _CSC_NAMES:
-            raise ValueError(f"Unsupported CSC source: {source!r}")
+        if source is None:
+            raise TypeError("source is required")
 
         if url is None:
             site = os.getenv("LSST_SITE", "").lower()
