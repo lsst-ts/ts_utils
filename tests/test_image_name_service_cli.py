@@ -14,7 +14,6 @@
 from unittest.mock import AsyncMock, patch
 
 import pytest
-
 from lsst.ts.utils.image_name_service_cli import main, run
 
 
@@ -34,7 +33,9 @@ async def test_run_prints_observation_ids(capsys: pytest.CaptureFixture[str]) ->
 
 
 def test_main_uses_site_and_electrometer_defaults() -> None:
-    with patch("lsst.ts.utils.image_name_service_cli.run", new_callable=AsyncMock) as run:
+    with patch(
+        "lsst.ts.utils.image_name_service_cli.run", new_callable=AsyncMock
+    ) as run:
         main([])
 
     run.assert_awaited_once_with(
