@@ -24,6 +24,7 @@ import unittest
 import astropy.units as u
 import pytest
 from astropy.coordinates import Angle
+
 from lsst.ts import utils
 
 
@@ -34,9 +35,7 @@ class BasicsTestCase(unittest.TestCase):
             (5.21, 359.20, 6.01),
             (270, -90, 0),
         ):
-            with self.subTest(
-                angle1=angle1, angle2=angle2, expected_diff=expected_diff
-            ):
+            with self.subTest(angle1=angle1, angle2=angle2, expected_diff=expected_diff):
                 diff = utils.angle_diff(angle1, angle2)
                 assert diff.deg == pytest.approx(expected_diff, abs=1e-7)
                 diff = utils.angle_diff(angle2, angle1)
@@ -102,28 +101,16 @@ class BasicsTestCase(unittest.TestCase):
                 with pytest.raises(AssertionError):
                     utils.assert_angles_almost_equal(angle2, angle1, bad_diff)
                 with pytest.raises(AssertionError):
-                    utils.assert_angles_almost_equal(
-                        Angle(angle1, u.deg), angle2, bad_diff
-                    )
+                    utils.assert_angles_almost_equal(Angle(angle1, u.deg), angle2, bad_diff)
                 with pytest.raises(AssertionError):
-                    utils.assert_angles_almost_equal(
-                        angle1, Angle(angle2, u.deg), bad_diff
-                    )
+                    utils.assert_angles_almost_equal(angle1, Angle(angle2, u.deg), bad_diff)
                 with pytest.raises(AssertionError):
-                    utils.assert_angles_almost_equal(
-                        Angle(angle1, u.deg), Angle(angle2, u.deg), bad_diff
-                    )
+                    utils.assert_angles_almost_equal(Angle(angle1, u.deg), Angle(angle2, u.deg), bad_diff)
 
                 good_diff = diff + epsilon
                 utils.assert_angles_almost_equal(angle1, angle2, good_diff)
                 utils.assert_angles_almost_equal(angle1, angle2, good_diff.deg)
                 utils.assert_angles_almost_equal(angle2, angle1, good_diff)
-                utils.assert_angles_almost_equal(
-                    Angle(angle1, u.deg), angle2, good_diff
-                )
-                utils.assert_angles_almost_equal(
-                    angle1, Angle(angle2, u.deg), good_diff
-                )
-                utils.assert_angles_almost_equal(
-                    Angle(angle1, u.deg), Angle(angle2, u.deg), good_diff
-                )
+                utils.assert_angles_almost_equal(Angle(angle1, u.deg), angle2, good_diff)
+                utils.assert_angles_almost_equal(angle1, Angle(angle2, u.deg), good_diff)
+                utils.assert_angles_almost_equal(Angle(angle1, u.deg), Angle(angle2, u.deg), good_diff)

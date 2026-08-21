@@ -30,14 +30,10 @@ async def run(url: str | None, csc_index: int, source: str, num_images: int) -> 
 def main(args: Sequence[str] | None = None) -> None:
     """Run the Image Name Service command-line client."""
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--url", help="Image Name Service URL (default: selected by LSST_SITE)."
-    )
+    parser.add_argument("--url", help="Image Name Service URL (default: selected by LSST_SITE).")
     parser.add_argument("--csc-index", type=int, default=3, help="CSC instance index.")
     parser.add_argument("--source", default="Electrometer", help="CSC name.")
-    parser.add_argument(
-        "num_images", type=int, nargs="?", default=1, metavar="num-images"
-    )
+    parser.add_argument("num_images", type=int, nargs="?", default=1, metavar="num-images")
     parsed_args = parser.parse_args(args)
     asyncio.run(
         run(

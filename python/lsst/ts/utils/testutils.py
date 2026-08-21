@@ -101,8 +101,7 @@ def modify_environ(**kwargs: typing.Any) -> Generator[None, None, None]:
     ]
     if bad_value_strs:
         raise RuntimeError(
-            "The following arguments are not of type str or None: "
-            + ", ".join(bad_value_strs)
+            "The following arguments are not of type str or None: " + ", ".join(bad_value_strs)
         )
 
     new_environ = os.environ.copy()

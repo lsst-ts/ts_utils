@@ -151,9 +151,7 @@ class ImageNameServiceClient:
         try:
             async with aiohttp.ClientSession(
                 self.url,
-                connector=aiohttp.TCPConnector(
-                    ssl=self.url.lower().startswith("https://")
-                ),
+                connector=aiohttp.TCPConnector(ssl=self.url.lower().startswith("https://")),
             ) as session:
                 async with session.get(url=call_url, params=params) as response:
                     if response.status >= 400:
@@ -162,9 +160,7 @@ class ImageNameServiceClient:
                     values: list[str] = await response.json()
                     self.log.info(f"{values=}")
                     try:
-                        image_sequence_array = [
-                            int(item.split("_")[-1]) for item in values
-                        ]
+                        image_sequence_array = [int(item.split("_")[-1]) for item in values]
                     except (AttributeError, TypeError, ValueError) as exc:
                         raise ImageNameServiceError(
                             url=self.url,

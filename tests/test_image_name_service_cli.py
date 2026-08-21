@@ -14,13 +14,12 @@
 from unittest.mock import AsyncMock, patch
 
 import pytest
+
 from lsst.ts.utils.image_name_service_cli import main, run
 
 
 async def test_run_prints_observation_ids(capsys: pytest.CaptureFixture[str]) -> None:
-    with patch(
-        "lsst.ts.utils.image_name_service_cli.ImageNameServiceClient"
-    ) as client_class:
+    with patch("lsst.ts.utils.image_name_service_cli.ImageNameServiceClient") as client_class:
         client_class.return_value.get_next_obs_id = AsyncMock(
             return_value=([1, 2], ["EM1_O_20260729_000001", "EM1_O_20260729_000002"])
         )
@@ -33,9 +32,7 @@ async def test_run_prints_observation_ids(capsys: pytest.CaptureFixture[str]) ->
 
 
 def test_main_uses_site_and_electrometer_defaults() -> None:
-    with patch(
-        "lsst.ts.utils.image_name_service_cli.run", new_callable=AsyncMock
-    ) as run:
+    with patch("lsst.ts.utils.image_name_service_cli.run", new_callable=AsyncMock) as run:
         main([])
 
     run.assert_awaited_once_with(

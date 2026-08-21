@@ -25,6 +25,7 @@ from unittest.mock import MagicMock, patch
 import aiohttp
 import pytest
 from aiohttp import web
+
 from lsst.ts.utils.image_name_service_client import (
     ImageNameServiceClient,
     ImageNameServiceError,
@@ -109,9 +110,7 @@ class GeneratorTestCase(unittest.IsolatedAsyncioTestCase):
             ) = await self.image_name_service_client.get_next_obs_id(num_images=-1)
 
     async def test_invalid_source_error(self) -> None:
-        client = ImageNameServiceClient(
-            url="http://127.0.0.1:8080", csc_index=3, source="InvalidSource"
-        )
+        client = ImageNameServiceClient(url="http://127.0.0.1:8080", csc_index=3, source="InvalidSource")
         with pytest.raises(ImageNameServiceError) as exc_info:
             await client.get_next_obs_id(num_images=1)
 
@@ -122,9 +121,7 @@ class GeneratorTestCase(unittest.IsolatedAsyncioTestCase):
         assert isinstance(error.__cause__, aiohttp.ClientResponseError)
 
     async def test_malformed_response_error(self) -> None:
-        client = ImageNameServiceClient(
-            url="http://127.0.0.1:8080", csc_index=3, source="MalformedResponse"
-        )
+        client = ImageNameServiceClient(url="http://127.0.0.1:8080", csc_index=3, source="MalformedResponse")
         with pytest.raises(ImageNameServiceError) as exc_info:
             await client.get_next_obs_id(num_images=1)
 
@@ -160,9 +157,7 @@ def test_explicit_url(url: str, expected_url: str) -> None:
 
 def test_source_is_not_restricted() -> None:
     source = "NewCsc"
-    client = ImageNameServiceClient(
-        url="http://mcm.example.org", csc_index=3, source=source
-    )
+    client = ImageNameServiceClient(url="http://mcm.example.org", csc_index=3, source=source)
     assert client.source == source
 
 
@@ -173,9 +168,7 @@ def test_source_is_not_restricted() -> None:
         ({"url": "http://mcm.example.org", "csc_index": 3}, "source"),
     ],
 )
-def test_required_constructor_arguments(
-    kwargs: dict[str, str | int], message: str
-) -> None:
+def test_required_constructor_arguments(kwargs: dict[str, str | int], message: str) -> None:
     with pytest.raises(TypeError, match=message):
         ImageNameServiceClient(**kwargs)
 
@@ -212,9 +205,7 @@ async def test_connector_ssl_matches_url(url: str, ssl: bool) -> None:
 
 
 async def test_connection_error() -> None:
-    client = ImageNameServiceClient(
-        url="http://127.0.0.1:1", csc_index=3, source="Electrometer"
-    )
+    client = ImageNameServiceClient(url="http://127.0.0.1:1", csc_index=3, source="Electrometer")
     with pytest.raises(ImageNameServiceError) as exc_info:
         await client.get_next_obs_id(num_images=1)
 
