@@ -39,9 +39,7 @@ _MIDDLE_WRAP_ANGLE = astropy.coordinates.Angle(180, u.deg)
 _POSITIVE_WRAP_ANGLE = astropy.coordinates.Angle(360, u.deg)
 
 
-def angle_diff(
-    angle1: AngleOrDegType, angle2: AngleOrDegType
-) -> astropy.coordinates.Angle:
+def angle_diff(angle1: AngleOrDegType, angle2: AngleOrDegType) -> astropy.coordinates.Angle:
     """Return angle1 - angle2 wrapped into the range [-180, 180) deg.
 
     Parameters
@@ -57,8 +55,7 @@ def angle_diff(
         angle1 - angle2 wrapped into the range -180 <= diff < 180 deg.
     """
     return angle_wrap_center(
-        astropy.coordinates.Angle(angle1, u.deg)
-        - astropy.coordinates.Angle(angle2, u.deg)
+        astropy.coordinates.Angle(angle1, u.deg) - astropy.coordinates.Angle(angle2, u.deg)
     )
 
 

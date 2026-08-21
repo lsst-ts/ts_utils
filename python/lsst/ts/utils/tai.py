@@ -47,9 +47,7 @@ import astropy.utils.iers
 SECONDS_PER_DAY = 24 * 60 * 60
 
 # MJD - unix seconds, in seconds
-MJD_MINUS_UNIX_SECONDS = (
-    astropy.time.Time(0, scale="utc", format="unix").utc.mjd * SECONDS_PER_DAY
-)
+MJD_MINUS_UNIX_SECONDS = astropy.time.Time(0, scale="utc", format="unix").utc.mjd * SECONDS_PER_DAY
 
 # A list of (utc_unix_seconds, TAI-UTC seconds);
 # automatically updated by `_update_leap_second_table`.
@@ -181,10 +179,7 @@ def tai_from_utc_unix(utc_unix: float) -> float:
         )
     i = bisect.bisect(utc_leap_second_table, (utc_unix, math.inf))
     if i == 0:
-        raise ValueError(
-            f"{utc_unix} < start of integer leap seconds "
-            f"= {utc_leap_second_table[0][0]}"
-        )
+        raise ValueError(f"{utc_unix} < start of integer leap seconds = {utc_leap_second_table[0][0]}")
     utc0, tai_minus_utc0 = utc_leap_second_table[i - 1]
     utc1, tai_minus_utc1 = utc_leap_second_table[i]
     if utc_unix + SECONDS_PER_DAY > utc1:
@@ -236,15 +231,11 @@ def utc_from_tai_unix(tai_unix: float) -> float:
         raise RuntimeError("No leap second table")
     if tai_unix > tai_leap_second_table[-1][0]:
         raise ValueError(
-            f"{tai_unix} > {tai_leap_second_table[-1][0]} = "
-            "tai_unix expiry date of leap second table"
+            f"{tai_unix} > {tai_leap_second_table[-1][0]} = tai_unix expiry date of leap second table"
         )
     i = bisect.bisect(tai_leap_second_table, (tai_unix, math.inf))
     if i == 0:
-        raise ValueError(
-            f"{tai_unix} < start of integer leap seconds "
-            f"= {tai_leap_second_table[0][0]}"
-        )
+        raise ValueError(f"{tai_unix} < start of integer leap seconds = {tai_leap_second_table[0][0]}")
     tai_minus_utc = tai_leap_second_table[i - 1][1]
     return tai_unix - tai_minus_utc
 
@@ -273,9 +264,7 @@ def _update_leap_second_table() -> None:
     ap_table = astropy.utils.iers.LeapSeconds.auto_open()
     utc_leap_second_table = [
         (
-            astropy.time.Time(
-                datetime.datetime(row["year"], row["month"], 1, 0, 0, 0), scale="utc"
-            ).unix,
+            astropy.time.Time(datetime.datetime(row["year"], row["month"], 1, 0, 0, 0), scale="utc").unix,
             float(row["tai_utc"]),
         )
         for row in ap_table
@@ -285,24 +274,17 @@ def _update_leap_second_table() -> None:
     last_tai_utc = utc_leap_second_table[-1][1]
     utc_leap_second_table.append((expiry_date_utc_unix, last_tai_utc))
     tai_leap_second_table = [
-        (unix_seconds + tai_utc, tai_utc)
-        for (unix_seconds, tai_utc) in utc_leap_second_table
+        (unix_seconds + tai_utc, tai_utc) for (unix_seconds, tai_utc) in utc_leap_second_table
     ]
     _UTC_LEAP_SECOND_TABLE = utc_leap_second_table
     _TAI_LEAP_SECOND_TABLE = tai_leap_second_table
 
-    update_date = (
-        expiry_date_utc_unix - _LEAP_SECOND_TABLE_UPDATE_MARGIN_DAYS * SECONDS_PER_DAY
-    )
+    update_date = expiry_date_utc_unix - _LEAP_SECOND_TABLE_UPDATE_MARGIN_DAYS * SECONDS_PER_DAY
     update_delay = update_date - time.time()
     if _LEAP_SECOND_TABLE_UPDATE_TIMER is not None:
         _LEAP_SECOND_TABLE_UPDATE_TIMER.cancel()
-    _log.debug(
-        f"Schedule a timer to call _update_leap_second_table in {update_delay} seconds"
-    )
-    _LEAP_SECOND_TABLE_UPDATE_TIMER = threading.Timer(
-        update_delay, _update_leap_second_table
-    )
+    _log.debug(f"Schedule a timer to call _update_leap_second_table in {update_delay} seconds")
+    _LEAP_SECOND_TABLE_UPDATE_TIMER = threading.Timer(update_delay, _update_leap_second_table)
     _LEAP_SECOND_TABLE_UPDATE_TIMER.daemon = True
     _LEAP_SECOND_TABLE_UPDATE_TIMER.start()
 

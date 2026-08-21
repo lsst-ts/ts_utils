@@ -1,0 +1,1 @@
+Added ImageNameClientError which can be caught to add better error information.
