@@ -1,1 +1,0 @@
-Added towncrier changelog support and switched to ruff for pre-commit hooks.

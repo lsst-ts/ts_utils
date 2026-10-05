@@ -6,6 +6,25 @@
 Version History
 ###############
 
+.. towncrier release notes start
+
+v1.3.0 (2026-10-05)
+===================
+
+New Features
+------------
+
+- Added ImageNameClientError which can be caught to add better error information. (`OSW-2836 <https://rubinobs.atlassian.net//browse/OSW-2836>`_)
+- Add the local_scheme="no-local-version" to the setup.py. (`SSW-2992 <https://rubinobs.atlassian.net//browse/SSW-2992>`_)
+
+
+Other Changes and Additions
+---------------------------
+
+- Add and update the license header. (`OSW-2830 <https://rubinobs.atlassian.net//browse/OSW-2830>`_)
+- Added towncrier changelog support and switched to ruff for pre-commit hooks. (`OSW-2836 <https://rubinobs.atlassian.net//browse/OSW-2836>`_)
+
+
 v1.2.9
 ------
 
