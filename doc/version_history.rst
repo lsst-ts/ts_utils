@@ -6,6 +6,11 @@
 Version History
 ###############
 
+v1.2.9
+------
+
+* Adapt the flake8 format.
+
 v1.2.8
 ------
 

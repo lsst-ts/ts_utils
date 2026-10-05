@@ -1,6 +1,6 @@
 # This file is part of ts_utils.
 #
-# Developed for the Rubin Observatory Telescope and Site System.
+# Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 # This product includes software developed by the LSST Project
 # (https://www.lsst.org).
 # See the COPYRIGHT file at the top-level directory of this distribution
@@ -13,11 +13,11 @@
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import os
 import unittest
@@ -28,6 +28,7 @@ import astropy.units as u
 import numpy as np
 import pytest
 from astropy.coordinates import Angle
+
 from lsst.ts import utils
 
 
@@ -46,31 +47,19 @@ class BasicsTestCase(unittest.TestCase):
                 with pytest.raises(AssertionError):
                     utils.assert_angles_almost_equal(angle2, angle1, bad_diff)
                 with pytest.raises(AssertionError):
-                    utils.assert_angles_almost_equal(
-                        Angle(angle1, u.deg), angle2, bad_diff
-                    )
+                    utils.assert_angles_almost_equal(Angle(angle1, u.deg), angle2, bad_diff)
                 with pytest.raises(AssertionError):
-                    utils.assert_angles_almost_equal(
-                        angle1, Angle(angle2, u.deg), bad_diff
-                    )
+                    utils.assert_angles_almost_equal(angle1, Angle(angle2, u.deg), bad_diff)
                 with pytest.raises(AssertionError):
-                    utils.assert_angles_almost_equal(
-                        Angle(angle1, u.deg), Angle(angle2, u.deg), bad_diff
-                    )
+                    utils.assert_angles_almost_equal(Angle(angle1, u.deg), Angle(angle2, u.deg), bad_diff)
 
                 good_diff = diff + epsilon
                 utils.assert_angles_almost_equal(angle1, angle2, good_diff)
                 utils.assert_angles_almost_equal(angle1, angle2, good_diff.deg)
                 utils.assert_angles_almost_equal(angle2, angle1, good_diff)
-                utils.assert_angles_almost_equal(
-                    Angle(angle1, u.deg), angle2, good_diff
-                )
-                utils.assert_angles_almost_equal(
-                    angle1, Angle(angle2, u.deg), good_diff
-                )
-                utils.assert_angles_almost_equal(
-                    Angle(angle1, u.deg), Angle(angle2, u.deg), good_diff
-                )
+                utils.assert_angles_almost_equal(Angle(angle1, u.deg), angle2, good_diff)
+                utils.assert_angles_almost_equal(angle1, Angle(angle2, u.deg), good_diff)
+                utils.assert_angles_almost_equal(Angle(angle1, u.deg), Angle(angle2, u.deg), good_diff)
 
     def test_modify_environ(self) -> None:
         rng = np.random.default_rng(seed=45)

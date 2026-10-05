@@ -1,6 +1,6 @@
 # This file is part of ts_utils.
 #
-# Developed for the Rubin Observatory Telescope and Site System.
+# Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 # This product includes software developed by the LSST Project
 # (https://www.lsst.org).
 # See the COPYRIGHT file at the top-level directory of this distribution
@@ -13,17 +13,18 @@
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import asyncio
 import unittest
 from collections.abc import Generator, Sequence
 
 import pytest
+
 from lsst.ts import utils
 
 
@@ -54,9 +55,7 @@ class BasicsTestCase(unittest.IsolatedAsyncioTestCase):
         # specifying i0 avoids the need to call next 2*31 times.
         max_int32 = (1 << 31) - 1
         generator = utils.index_generator(i0=max_int32)
-        self.check_index_generator(
-            generator=generator, expected_values=[max_int32, 1, 2]
-        )
+        self.check_index_generator(generator=generator, expected_values=[max_int32, 1, 2])
 
         imin = -2
         imax = 5
@@ -70,9 +69,7 @@ class BasicsTestCase(unittest.IsolatedAsyncioTestCase):
         imax = 5
         i0 = imax
         generator = utils.index_generator(imin=imin, imax=imax, i0=i0)
-        self.check_index_generator(
-            generator=generator, expected_values=[5, -2, -1, 0, 1, 2, 3, 4, 5, -2]
-        )
+        self.check_index_generator(generator=generator, expected_values=[5, -2, -1, 0, 1, 2, 3, 4, 5, -2])
 
     async def test_make_done_future(self) -> None:
         done_future = utils.make_done_future()
