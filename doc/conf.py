@@ -27,11 +27,9 @@ https://developer.lsst.io/stack/building-single-package-docs.html
 """
 
 import lsst.ts.utils  # noqa
-from documenteer.conf.pipelinespkg import *  # type: ignore # noqa
+from documenteer.conf.guide import *  # noqa
 
 project = "ts_utils"
 html_theme_options["logotext"] = project  # type: ignore # noqa
 html_title = project
 html_short_title = project
-# Avoid warning: Could not find tag file _doxygen/doxygen.tag
-doxylink = {}  # type: ignore
